@@ -8,34 +8,25 @@ from multiprocessing import cpu_count
 from multiprocessing.dummy import Pool
 from datetime import datetime
 from openpyxl import Workbook, load_workbook
-import os
-import urllib3
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 MAX_WORKER = cpu_count()
 MIN_STUDENT = 1 
-MAX_STUDENT = 100
+MAX_STUDENT = 1000
 STUDENT_PER_WORKER = 10
 
 def solve(start):
     new_workbook = Workbook()
     sheet = new_workbook.active
-    end = start + STUDENT_PER_WORKER
-    
-    if not os.path.exists('successful_captchas'):
-        os.makedirs('successful_captchas')
-        
-    for SBD in range(start, end):
+    end=start+STUDENT_PER_WORKER
+    for SBD in range(start,end):
         while True:
             session = Session()
-            session.get(f"http://hatinh.edu.vn/tracuudiemthihsg", verify=False)
+            session.get(f"http://hatinh.edu.vn/tracuudiemthihsg",verify=False)
             time_now = get_time_now()
-            response = session.get(f"http://hatinh.edu.vn/api/Common/Captcha/getCaptcha?returnType=image&site=32982&width=150&height=50&t={time_now}", verify=False)
-            
+            response = session.get(f"http://hatinh.edu.vn/api/Common/Captcha/getCaptcha?returnType=image&site=32982&width=150&height=50&t={time_now}",verify=False)
             captcha_image = Image.open(BytesIO(response.content))
-            
             pix = captcha_image.load()
             for y in range(captcha_image.size[1]):
                 for x in range(captcha_image.size[0]):
@@ -43,7 +34,7 @@ def solve(start):
                     pix[x, y] = (255, 255, 255) if any(c > 50 for c in image_color) else (0, 0, 0)
 
             answer = sub("\s", "", pytesseract.image_to_string(captcha_image))
-            
+
             headers = {
                 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36',
                 'Accept': '*/*',
@@ -94,7 +85,6 @@ def solve(start):
                 data = findall(r"<td  >(.*?)</td>", response.text)
                 sheet.append(data)
                 print(f"{data}")
-                captcha_image.save(f'successful_captchas/{answer}.png')
                 new_workbook.save(f"{start}-{start+STUDENT_PER_WORKER}.xlsx")
                 break
 
