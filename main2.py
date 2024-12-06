@@ -16,7 +16,7 @@ pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 MAX_WORKER = cpu_count()
 MIN_STUDENT = 1 
-MAX_STUDENT = 100
+MAX_STUDENT = 1000
 STUDENT_PER_WORKER = 10
 
 def solve(start):
