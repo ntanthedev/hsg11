@@ -1,1 +1,0 @@
-http://hatinh.edu.vn/

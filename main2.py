@@ -16,7 +16,7 @@ pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 MAX_WORKER = cpu_count()
 MIN_STUDENT = 1 
-MAX_STUDENT = 1000
+MAX_STUDENT = 1250
 STUDENT_PER_WORKER = 10
 
 def solve(start):
@@ -58,12 +58,12 @@ def solve(start):
             # orz ngan tai
             params = [
                 ('module', 'Content.Listing'),
-                ('moduleId', '1016'),
+                ('moduleId', '1017'),
                 ('cmd', 'redraw'),
                 ('site', '32982'),
                 ('url_mode', 'rewrite'),
-                ('submitFormId', '1016'),
-                ('moduleId', '1016'),
+                ('submitFormId', '1017'),
+                ('moduleId', '1017'),
                 ('page', ''),
                 ('site', '32982'),
             ]
@@ -73,7 +73,7 @@ def solve(start):
                 'itemsPerPage': '1000',
                 'pageNo': '1',
                 'service': 'Content.Decl.DataSet.Grouping.select',
-                'itemId': '65fd00992bf36065700fbe74',
+                'itemId': '67da9e2ad0331b62c308e4b4',
                 'gridModuleParentId': '16',
                 'type': 'Decl.DataSet',
                 'page': '',
@@ -87,7 +87,7 @@ def solve(start):
                 'captcha_code': answer,
                 '_t': time_now,
             }
-            response = session.post('https://hatinh.edu.vn/', params=params, data=data, headers=headers)
+            response = session.post('https://hatinh.edu.vn/', params=params, data=data)
             response.raise_for_status()
             assert (response.text.strip() != "")
             if response.text != "BotDetect" and "Nhập sai mã bảo mật" not in response.text:

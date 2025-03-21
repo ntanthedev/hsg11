@@ -38,7 +38,7 @@ for sbd in range(start,end):
 
         capcha_text = re.sub("\\s", "", pytesseract.image_to_string(img))
 
-        print("Capcha is: ", (capcha_text))
+        # print("Capcha is: ", (capcha_text))
 
         headers = {
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36',
@@ -52,24 +52,24 @@ for sbd in range(start,end):
             }
 
         params = [
-            ('module', 'Content.Listing'),
-            ('moduleId', '1016'),
-            ('cmd', 'redraw'),
-            ('site', '32982'),
-            ('url_mode', 'rewrite'),
-            ('submitFormId', '1016'), 
-            ('moduleId', '1016'),
-            ('page', ''),
-            ('site', '32982'),
-        ]
+                ('module', 'Content.Listing'),
+                ('moduleId', '1017'),
+                ('cmd', 'redraw'),
+                ('site', '32982'),
+                ('url_mode', 'rewrite'),
+                ('submitFormId', '1017'),
+                ('moduleId', '1017'),
+                ('page', ''),
+                ('site', '32982'),
+            ]
 
         data = {
             'layout': 'Decl.DataSet.Detail.default',
             'itemsPerPage': '1000',
             'pageNo': '1',
             'service': 'Content.Decl.DataSet.Grouping.select',
-            'itemId': '65fd00992bf36065700fbe74',
-            'gridModuleParentId': '16',
+            'itemId': '67da9e2ad0331b62c308e4b4',
+            'gridModuleParentId': '17',
             'type': 'Decl.DataSet',
             'page': '',
             'modulePosition': '0',
@@ -80,12 +80,12 @@ for sbd in range(start,end):
             'BDC_UserSpecifiedCaptchaId': capcha_text,
             'captcha_check': capcha_text,
             'captcha_code': capcha_text,
-            '_t': int(t),
+            '_t': t,
         }
 
-        response = rs.post('https://hatinh.edu.vn/', params=params, data=data, headers=headers)
+        response = rs.post('http://hatinh.edu.vn/', params=params, data=data)
         response.raise_for_status()
-        # print(response.request.headers)
+        # print(response.text)
         assert(response.text.strip() != "")
         if response.text != "BotDetect" and "Nhập sai mã bảo mật" not in response.text:
             data = re.findall(r"<td  >(.*?)</td>", response.text)
