@@ -5,11 +5,8 @@ import pytesseract
 from PIL import Image
 import requests
 import io
-from openpyxl import Workbook
+import csv
 import multiprocessing
-
-workbook = Workbook()
-sheet = workbook.active
 
 start = 1
 end = 1200
@@ -82,7 +79,15 @@ num_cores = multiprocessing.cpu_count()
 
 output = Parallel(n_jobs=num_cores)(delayed(crawl)(i) for i in range(start, end+1))
 
-for v in output:
-    sheet.append(v)
+with open('results.csv', 'w', newline='', encoding='utf-8') as csvfile:
+    csv_writer = csv.writer(csvfile)
+    for v in output:
+        if v:  
+            csv_writer.writerow(v)
 
-workbook.save(f"uwu.xlsx")
+with open('ds.txt', 'w', encoding='utf-8') as f:
+    for v in output:
+        if v:  
+            f.write(str(v) + '\n')
+
+print("Data has been saved to results.csv")
